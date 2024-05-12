@@ -16,7 +16,6 @@ public class RegisterUseCase extends UseCase<RegisterUseCase.InputValue, ApiResp
     @Autowired
     AccountRepository accountRepo;
 
-
     @Override
     public ApiResponse execute(InputValue input) {
         try {
