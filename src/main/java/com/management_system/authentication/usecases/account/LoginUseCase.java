@@ -4,15 +4,15 @@ import com.management_system.authentication.entities.api.ApiResponse;
 import com.management_system.authentication.entities.database.Account;
 import com.management_system.authentication.infrastructure.repository.AccountRepository;
 import com.management_system.authentication.usecases.UseCase;
-import com.management_system.ultilities.security.JwtUtils;
+//import com.management_system.utilities.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 @Component
 public class LoginUseCase extends UseCase<LoginUseCase.InputValue, ApiResponse>{
-    @Autowired
-    JwtUtils jwtUtils;
+//    @Autowired
+//    JwtUtils jwtUtils;
 
     @Autowired
     AccountRepository accountRepo;
@@ -24,8 +24,8 @@ public class LoginUseCase extends UseCase<LoginUseCase.InputValue, ApiResponse>{
             Account reqAccount = input.account();
             Account account = accountRepo.getAccountByUserNameAndPassword(reqAccount.getUsername(), reqAccount.getPassword());
 
-            String jwt = jwtUtils.generateJwt(account);
-            System.out.println(jwt);
+//            String jwt = jwtUtils.generateJwt(account);
+//            System.out.println(jwt);
 
             if (account != null) {
                 return ApiResponse.builder()
