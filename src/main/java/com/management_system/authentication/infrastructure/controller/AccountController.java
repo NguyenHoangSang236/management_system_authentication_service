@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
-@RequestMapping("/account")
+@RequestMapping("/unauthen/account")
 @AllArgsConstructor
 public class AccountController {
     final UseCaseExecutor useCaseExecutor;
