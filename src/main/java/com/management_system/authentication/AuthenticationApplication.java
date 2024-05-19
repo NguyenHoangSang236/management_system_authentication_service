@@ -15,7 +15,7 @@ import org.springframework.context.annotation.ComponentScan;
 				"com.management_system.utilities",
 		}
 )
-@ComponentScan({
+@ComponentScan(basePackages = {
 		"com.management_system.authentication.usecases",
 		"com.management_system.authentication.entities",
 		"com.management_system.authentication.infrastructure",

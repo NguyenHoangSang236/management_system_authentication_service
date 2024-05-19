@@ -4,15 +4,15 @@ import com.management_system.authentication.entities.api.ApiResponse;
 import com.management_system.authentication.entities.database.Account;
 import com.management_system.authentication.infrastructure.repository.AccountRepository;
 import com.management_system.authentication.usecases.UseCase;
-//import com.management_system.utilities.utils.JwtUtils;
+import com.management_system.utilities.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 @Component
 public class LoginUseCase extends UseCase<LoginUseCase.InputValue, ApiResponse>{
-//    @Autowired
-//    JwtUtils jwtUtils;
+    @Autowired
+    JwtUtils jwtUtils;
 
     @Autowired
     AccountRepository accountRepo;
