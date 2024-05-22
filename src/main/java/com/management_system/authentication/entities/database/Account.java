@@ -1,5 +1,6 @@
 package com.management_system.authentication.entities.database;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -19,6 +20,12 @@ import java.util.List;
 @Document("account")
 @Builder
 public class Account implements UserDetails {
+    @Getter
+    @Setter
+    @Id
+    @Indexed(unique = true)
+    String id;
+
     @Setter
     @Field(name = "user_name")
     @JsonProperty("user_name")
@@ -77,21 +84,25 @@ public class Account implements UserDetails {
         return this.userName;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
         return true;

@@ -1,6 +1,7 @@
 package com.management_system.authentication.entities.database;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -8,6 +9,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -17,6 +20,7 @@ import java.util.Date;
 @Builder
 public class PersonalInfo {
     @Id
+    @JsonProperty("personal_certificate_id")
     @Indexed(unique = true)
     String id;
 
@@ -51,6 +55,27 @@ public class PersonalInfo {
     @JsonProperty("end_working_date")
     @Field(name = "end_working_date")
     Date endtWorkingDate;
+
+
+    public Map<String, Object> toSubMap() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> map = objectMapper.convertValue(this, Map.class);
+        Map<String, Object> resMap = new HashMap<>();
+
+        // add 'personal_info.' before each key in map
+        for(String key: map.keySet()) {
+            if(map.get(key) != null) {
+                StringBuilder newKeyBuilder = new StringBuilder();
+                newKeyBuilder.append("personal_info.").append(key);
+
+                String newKey = newKeyBuilder.toString();
+
+                resMap.put(newKey, map.get(key));
+            }
+        }
+
+        return resMap;
+    }
 }
 
 

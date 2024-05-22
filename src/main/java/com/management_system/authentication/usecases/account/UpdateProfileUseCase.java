@@ -2,44 +2,43 @@ package com.management_system.authentication.usecases.account;
 
 import com.management_system.authentication.entities.api.ApiResponse;
 import com.management_system.authentication.entities.database.Account;
+import com.management_system.authentication.entities.database.PersonalInfo;
 import com.management_system.authentication.infrastructure.repository.AccountRepository;
 import com.management_system.authentication.usecases.UseCase;
+import com.management_system.utilities.entities.TokenInfo;
+import com.management_system.utilities.utils.DbUtils;
+import com.management_system.utilities.utils.JwtUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-import java.util.UUID;
-
 @Component
-public class RegisterUseCase extends UseCase<RegisterUseCase.InputValue, ApiResponse> {
+public class UpdateProfileUseCase extends UseCase<UpdateProfileUseCase.InputValue, ApiResponse> {
+    @Autowired
+    JwtUtils jwtUtils;
+
+    @Autowired
+    DbUtils dbUtils;
+
     @Autowired
     AccountRepository accountRepo;
+
 
     @Override
     public ApiResponse execute(InputValue input) {
         try {
-            Account reqAccount = input.account();
+            String jwt = jwtUtils.getJwtFromRequest(input.request());
+            TokenInfo tokenInfo = jwtUtils.getRefreshTokenInfoFromJwt(jwt);
+            Account account = accountRepo.getAccountByUserName(tokenInfo.getUserName());
 
-            reqAccount.setCreationDate(new Date());
-            reqAccount.getPersonalInfo().setStartWorkingDate(new Date());
-            reqAccount.setOnline(false);
-            reqAccount.setId(UUID.randomUUID().toString());
-
-            accountRepo.save(reqAccount);
+            dbUtils.updateSpecificFields(account.getId(), input.personalInfo().toSubMap(), Account.class);
 
             return ApiResponse.builder()
                     .result("success")
-                    .content("Register successfully")
+                    .content("Update profile successfully")
                     .status(HttpStatus.OK)
-                    .build();
-        }
-        catch (DuplicateKeyException dupExp) {
-            return ApiResponse.builder()
-                    .result("failed")
-                    .content("This account has been existed")
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .build();
         }
         catch (Exception e) {
@@ -53,5 +52,5 @@ public class RegisterUseCase extends UseCase<RegisterUseCase.InputValue, ApiResp
         }
     }
 
-    public record InputValue(Account account) implements UseCase.InputValue {}
+    public record InputValue(PersonalInfo personalInfo, HttpServletRequest request) implements UseCase.InputValue {}
 }

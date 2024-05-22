@@ -9,4 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface AccountRepository extends MongoRepository<Account, String> {
     @Query("{'user_name': ?0, 'password': ?1}")
     Account getAccountByUserNameAndPassword(String userName, String password);
+
+    @Query("{'user_name': ?0}")
+    Account getAccountByUserName(String userName);
 }
