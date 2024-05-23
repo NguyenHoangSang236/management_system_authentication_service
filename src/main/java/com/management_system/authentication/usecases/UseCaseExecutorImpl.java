@@ -6,7 +6,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 @Service
-public class UseCaseExecutorImpl implements UseCaseExecutor{
+public class UseCaseExecutorImpl implements UseCaseExecutor {
     @Override
     public <Any, In extends UseCase.InputValue, Out extends UseCase.OutputValue> CompletableFuture<Any> execute(
             UseCase<In, Out> useCase,

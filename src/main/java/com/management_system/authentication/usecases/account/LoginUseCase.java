@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 
 @Component
-public class LoginUseCase extends UseCase<LoginUseCase.InputValue, ApiResponse>{
+public class LoginUseCase extends UseCase<LoginUseCase.InputValue, ApiResponse> {
     @Autowired
     JwtUtils jwtUtils;
 
@@ -35,7 +35,7 @@ public class LoginUseCase extends UseCase<LoginUseCase.InputValue, ApiResponse>{
             if (account != null) {
                 TokenInfo tokenInfo = TokenInfo.builder()
                         .userName(account.getUsername())
-                        .roles(Arrays.asList(new String[]{account.getRole()}))
+                        .roles(Arrays.asList(account.getRole()))
                         .build();
 
                 String newJwtToken = jwtUtils.generateJwt(tokenInfo, TokenType.JWT);
@@ -48,16 +48,14 @@ public class LoginUseCase extends UseCase<LoginUseCase.InputValue, ApiResponse>{
                         .content(account)
                         .status(HttpStatus.OK)
                         .build();
-            }
-            else {
+            } else {
                 return ApiResponse.builder()
                         .result("failed")
                         .content("This account does not exist")
                         .status(HttpStatus.NO_CONTENT)
                         .build();
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
             return ApiResponse.builder()
@@ -69,5 +67,6 @@ public class LoginUseCase extends UseCase<LoginUseCase.InputValue, ApiResponse>{
     }
 
 
-    public record InputValue(Account account) implements UseCase.InputValue {}
+    public record InputValue(Account account) implements UseCase.InputValue {
+    }
 }

@@ -56,9 +56,9 @@ public class AccountController {
     }
 
     @PostMapping("/updateProfile")
-    public  CompletableFuture<ResponseEntity<ApiResponse>> updateProfile(@RequestBody String json, HttpServletRequest httpRequest) throws JsonProcessingException {
+    public CompletableFuture<ResponseEntity<ApiResponse>> updateProfile(@RequestBody String json, HttpServletRequest httpRequest) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-        PersonalInfo personalInfo= objectMapper.readValue(json, PersonalInfo.class);
+        PersonalInfo personalInfo = objectMapper.readValue(json, PersonalInfo.class);
 
         return useCaseExecutor.execute(
                 updateProfileUseCase,

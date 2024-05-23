@@ -63,12 +63,10 @@ public class PersonalInfo {
         Map<String, Object> resMap = new HashMap<>();
 
         // add 'personal_info.' before each key in map
-        for(String key: map.keySet()) {
-            if(map.get(key) != null) {
-                StringBuilder newKeyBuilder = new StringBuilder();
-                newKeyBuilder.append("personal_info.").append(key);
+        for (String key : map.keySet()) {
+            if (map.get(key) != null) {
 
-                String newKey = newKeyBuilder.toString();
+                String newKey = "personal_info." + key;
 
                 resMap.put(newKey, map.get(key));
             }

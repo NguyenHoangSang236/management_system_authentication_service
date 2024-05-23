@@ -39,8 +39,7 @@ public class UpdateProfileUseCase extends UseCase<UpdateProfileUseCase.InputValu
                     .content("Update profile successfully")
                     .status(HttpStatus.OK)
                     .build();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
             return ApiResponse.builder()
@@ -51,5 +50,6 @@ public class UpdateProfileUseCase extends UseCase<UpdateProfileUseCase.InputValu
         }
     }
 
-    public record InputValue(PersonalInfo personalInfo, HttpServletRequest request) implements UseCase.InputValue {}
+    public record InputValue(PersonalInfo personalInfo, HttpServletRequest request) implements UseCase.InputValue {
+    }
 }

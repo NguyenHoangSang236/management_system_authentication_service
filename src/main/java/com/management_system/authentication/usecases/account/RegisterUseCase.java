@@ -34,15 +34,13 @@ public class RegisterUseCase extends UseCase<RegisterUseCase.InputValue, ApiResp
                     .content("Register successfully")
                     .status(HttpStatus.OK)
                     .build();
-        }
-        catch (DuplicateKeyException dupExp) {
+        } catch (DuplicateKeyException dupExp) {
             return ApiResponse.builder()
                     .result("failed")
                     .content("This account has been existed")
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .build();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
             return ApiResponse.builder()
@@ -53,5 +51,6 @@ public class RegisterUseCase extends UseCase<RegisterUseCase.InputValue, ApiResp
         }
     }
 
-    public record InputValue(Account account) implements UseCase.InputValue {}
+    public record InputValue(Account account) implements UseCase.InputValue {
+    }
 }
