@@ -2,14 +2,14 @@ package com.management_system.authentication.infrastructure.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.management_system.authentication.entities.api.ApiResponse;
 import com.management_system.authentication.entities.database.Account;
 import com.management_system.authentication.entities.database.PersonalInfo;
-import com.management_system.authentication.infrastructure.config.ResponseMapper;
-import com.management_system.authentication.usecases.UseCaseExecutor;
 import com.management_system.authentication.usecases.account.LoginUseCase;
 import com.management_system.authentication.usecases.account.RegisterUseCase;
 import com.management_system.authentication.usecases.account.UpdateProfileUseCase;
+import com.management_system.utilities.core.usecase.UseCaseExecutor;
+import com.management_system.utilities.entities.ApiResponse;
+import com.management_system.utilities.entities.ResponseMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

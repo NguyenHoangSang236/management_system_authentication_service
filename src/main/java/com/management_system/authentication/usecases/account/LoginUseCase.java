@@ -1,10 +1,10 @@
 package com.management_system.authentication.usecases.account;
 
-import com.management_system.authentication.entities.api.ApiResponse;
 import com.management_system.authentication.entities.database.Account;
 import com.management_system.authentication.infrastructure.repository.AccountRepository;
-import com.management_system.authentication.usecases.UseCase;
 import com.management_system.utilities.constant.TokenType;
+import com.management_system.utilities.core.usecase.UseCase;
+import com.management_system.utilities.entities.ApiResponse;
 import com.management_system.utilities.entities.TokenInfo;
 import com.management_system.utilities.repository.RefreshTokenRepository;
 import com.management_system.utilities.utils.JwtUtils;
