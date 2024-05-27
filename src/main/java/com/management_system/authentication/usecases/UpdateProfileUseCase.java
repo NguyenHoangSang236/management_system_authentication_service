@@ -1,4 +1,4 @@
-package com.management_system.authentication.usecases.account;
+package com.management_system.authentication.usecases;
 
 import com.management_system.authentication.entities.database.Account;
 import com.management_system.authentication.entities.database.PersonalInfo;
@@ -28,8 +28,7 @@ public class UpdateProfileUseCase extends UseCase<UpdateProfileUseCase.InputValu
     @Override
     public ApiResponse execute(InputValue input) {
         try {
-            String jwt = jwtUtils.getJwtFromRequest(input.request());
-            TokenInfo tokenInfo = jwtUtils.getRefreshTokenInfoFromJwt(jwt);
+            TokenInfo tokenInfo = jwtUtils.getTokenInfoFromHttpRequest(input.request());
             Account account = accountRepo.getAccountByUserName(tokenInfo.getUserName());
 
             dbUtils.updateSpecificFields(account.getId(), input.personalInfo().toSubMap(), Account.class);
@@ -50,6 +49,5 @@ public class UpdateProfileUseCase extends UseCase<UpdateProfileUseCase.InputValu
         }
     }
 
-    public record InputValue(PersonalInfo personalInfo, HttpServletRequest request) implements UseCase.InputValue {
-    }
+    public record InputValue(PersonalInfo personalInfo, HttpServletRequest request) implements UseCase.InputValue {}
 }

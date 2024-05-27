@@ -1,4 +1,4 @@
-package com.management_system.authentication.usecases.account;
+package com.management_system.authentication.usecases;
 
 import com.management_system.authentication.entities.database.Account;
 import com.management_system.authentication.infrastructure.repository.AccountRepository;
