@@ -31,7 +31,7 @@ public class UpdateProfileUseCase extends UseCase<UpdateProfileUseCase.InputValu
             TokenInfo tokenInfo = jwtUtils.getTokenInfoFromHttpRequest(input.request());
             Account account = accountRepo.getAccountByUserName(tokenInfo.getUserName());
 
-            dbUtils.updateSpecificFields(account.getId(), input.personalInfo().toSubMap(), Account.class);
+            dbUtils.updateSpecificFields("_id", account.getId(), input.personalInfo().toSubMap(), Account.class);
 
             return ApiResponse.builder()
                     .result("success")
