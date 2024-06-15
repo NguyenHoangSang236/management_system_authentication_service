@@ -2,7 +2,7 @@ package com.management_system.authentication.usecases;
 
 import com.management_system.authentication.entities.database.Account;
 import com.management_system.authentication.infrastructure.repository.AccountRepository;
-import com.management_system.utilities.constant.TokenType;
+import com.management_system.utilities.constant.enumuration.TokenType;
 import com.management_system.utilities.core.usecase.UseCase;
 import com.management_system.utilities.entities.ApiResponse;
 import com.management_system.utilities.entities.TokenInfo;
