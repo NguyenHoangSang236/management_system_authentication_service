@@ -28,40 +28,30 @@ public class LoginUseCase extends UseCase<LoginUseCase.InputValue, ApiResponse> 
 
     @Override
     public ApiResponse execute(InputValue input) {
-        try {
-            Account reqAccount = input.account();
-            Account account = accountRepo.getAccountByUserNameAndPassword(reqAccount.getUsername(), reqAccount.getPassword());
+        Account reqAccount = input.account();
+        Account account = accountRepo.getAccountByUserNameAndPassword(reqAccount.getUsername(), reqAccount.getPassword());
 
-            if (account != null) {
-                TokenInfo tokenInfo = TokenInfo.builder()
-                        .userName(account.getUsername())
-                        .roles(Arrays.asList(account.getRole()))
-                        .build();
+        if (account != null) {
+            TokenInfo tokenInfo = TokenInfo.builder()
+                    .userName(account.getUsername())
+                    .roles(Arrays.asList(account.getRole()))
+                    .build();
 
-                String newJwtToken = jwtUtils.generateJwt(tokenInfo, TokenType.JWT);
-                System.out.println("JWT: " + newJwtToken);
-                jwtUtils.createRefreshTokenForAccount(account.getUsername(), account.getRole());
-
-                return ApiResponse.builder()
-                        .result("success")
-                        .message(newJwtToken)
-                        .content(account)
-                        .status(HttpStatus.OK)
-                        .build();
-            } else {
-                return ApiResponse.builder()
-                        .result("failed")
-                        .content("This account does not exist")
-                        .status(HttpStatus.NO_CONTENT)
-                        .build();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            String newJwtToken = jwtUtils.generateJwt(tokenInfo, TokenType.JWT);
+            System.out.println("JWT: " + newJwtToken);
+            jwtUtils.createRefreshTokenForAccount(account.getUsername(), account.getRole());
 
             return ApiResponse.builder()
+                    .result("success")
+                    .message(newJwtToken)
+                    .content(account)
+                    .status(HttpStatus.OK)
+                    .build();
+        } else {
+            return ApiResponse.builder()
                     .result("failed")
-                    .content("Error")
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .content("This account does not exist")
+                    .status(HttpStatus.NO_CONTENT)
                     .build();
         }
     }
