@@ -57,6 +57,5 @@ public class LoginUseCase extends UseCase<LoginUseCase.InputValue, ApiResponse> 
     }
 
 
-    public record InputValue(Account account) implements UseCase.InputValue {
-    }
+    public record InputValue(Account account) implements UseCase.InputValue {}
 }
