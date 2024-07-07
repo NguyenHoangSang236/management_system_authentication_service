@@ -40,7 +40,7 @@ public class UploadImageUseCase extends UseCase<UploadImageUseCase.InputValue, A
             PersonalInfo personalInfo = account.getPersonalInfo();
 
             personalInfo.setImage(uploadedImageUrl);
-            dbUtils.updateSpecificFields(account.getId(), personalInfo.toSubMap(), Account.class);
+            dbUtils.updateSpecificFields("_id", account.getId(), personalInfo.toSubMap(), Account.class);
 
             return ApiResponse.builder()
                     .result("success")
