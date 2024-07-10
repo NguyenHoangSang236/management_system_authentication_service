@@ -52,5 +52,5 @@ fi
 # Xóa container cũ, build và run container mới
 docker rm -f authentication-service-container
 docker build -t authentication-service-image .
-docker run -p8081:8081 --name authentication-service-container authentication-service-image
+docker run -d -p 8081:8081 --name authentication-service-container --network root_my_network authentication-service-image
 EOF
