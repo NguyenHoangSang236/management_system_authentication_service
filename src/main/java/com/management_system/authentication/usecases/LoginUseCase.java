@@ -22,9 +22,6 @@ public class LoginUseCase extends UseCase<LoginUseCase.InputValue, ApiResponse> 
     @Autowired
     AccountRepository accountRepo;
 
-    @Autowired
-    RefreshTokenRepository refreshTokenRepo;
-
 
     @Override
     public ApiResponse execute(InputValue input) {
