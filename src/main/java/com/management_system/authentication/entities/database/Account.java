@@ -2,6 +2,7 @@ package com.management_system.authentication.entities.database;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.management_system.utilities.entities.database.MongoDbEntity;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -12,14 +13,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Document("account")
 @Builder
-public class Account implements UserDetails {
+public class Account extends MongoDbEntity implements UserDetails {
     @Getter
     @Setter
     @Id
@@ -40,11 +40,6 @@ public class Account implements UserDetails {
     @Setter
     @Field(name = "role")
     String role;
-
-    @Getter
-    @Setter
-    @Field(name = "creation_date")
-    Date creationDate;
 
     @Getter
     @Setter
