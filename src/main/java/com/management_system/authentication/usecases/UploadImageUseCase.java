@@ -6,7 +6,6 @@ import com.management_system.authentication.infrastructure.repository.AccountRep
 import com.management_system.utilities.core.usecase.UseCase;
 import com.management_system.utilities.entities.ApiResponse;
 import com.management_system.utilities.entities.TokenInfo;
-import com.management_system.utilities.utils.DbUtils;
 import com.management_system.utilities.utils.FirebaseUtils;
 import com.management_system.utilities.utils.JwtUtils;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Optional;
 
 @Component
 public class UploadImageUseCase extends UseCase<UploadImageUseCase.InputValue, ApiResponse> {
@@ -26,9 +27,6 @@ public class UploadImageUseCase extends UseCase<UploadImageUseCase.InputValue, A
     @Autowired
     JwtUtils jwtUtils;
 
-    @Autowired
-    DbUtils dbUtils;
-
 
     @Override
     public ApiResponse execute(InputValue input) {
@@ -36,18 +34,30 @@ public class UploadImageUseCase extends UseCase<UploadImageUseCase.InputValue, A
             String uploadedImageUrl = firebaseUtils.upload(input.multipartFile(), input.fileName());
 
             TokenInfo tokenInfo = jwtUtils.getTokenInfoFromHttpRequest(input.request());
-            Account account = accountRepo.getAccountByUserName(tokenInfo.getUserName());
-            PersonalInfo personalInfo = account.getPersonalInfo();
+            Optional<Account> accountOptional = accountRepo.getAccountByUserName(tokenInfo.getUserName());
 
-            personalInfo.setImage(uploadedImageUrl);
-            dbUtils.updateSpecificFields("_id", account.getId(), personalInfo.toSubMap(), Account.class);
+            if (accountOptional.isPresent()) {
+                Account account = accountOptional.get();
+                PersonalInfo personalInfo = account.getPersonalInfo();
+                personalInfo.setImage(uploadedImageUrl);
+                account.setPersonalInfo(personalInfo);
 
-            return ApiResponse.builder()
-                    .result("success")
-                    .content("Update profile successfully")
-                    .message(uploadedImageUrl)
-                    .status(HttpStatus.OK)
-                    .build();
+                accountRepo.save(account);
+
+                return ApiResponse.builder()
+                        .result("success")
+                        .content("Update profile successfully")
+                        .message(uploadedImageUrl)
+                        .status(HttpStatus.OK)
+                        .build();
+            } else {
+                return ApiResponse.builder()
+                        .result("failed")
+                        .content("This account does not exist")
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -56,8 +66,11 @@ public class UploadImageUseCase extends UseCase<UploadImageUseCase.InputValue, A
                     .content("Error")
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .build();
-        }    }
+        }
+    }
 
 
-    public record InputValue(HttpServletRequest request, MultipartFile multipartFile, String fileName) implements UseCase.InputValue {}
+    public record InputValue(HttpServletRequest request, MultipartFile multipartFile,
+                             String fileName) implements UseCase.InputValue {
+    }
 }

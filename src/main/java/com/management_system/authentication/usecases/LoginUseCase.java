@@ -6,13 +6,14 @@ import com.management_system.utilities.constant.enumuration.TokenType;
 import com.management_system.utilities.core.usecase.UseCase;
 import com.management_system.utilities.entities.ApiResponse;
 import com.management_system.utilities.entities.TokenInfo;
-import com.management_system.utilities.repository.RefreshTokenRepository;
 import com.management_system.utilities.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Optional;
 
 @Component
 public class LoginUseCase extends UseCase<LoginUseCase.InputValue, ApiResponse> {
@@ -26,12 +27,14 @@ public class LoginUseCase extends UseCase<LoginUseCase.InputValue, ApiResponse> 
     @Override
     public ApiResponse execute(InputValue input) {
         Account reqAccount = input.account();
-        Account account = accountRepo.getAccountByUserNameAndPassword(reqAccount.getUsername(), reqAccount.getPassword());
+        Optional<Account> accountOptional = accountRepo.getAccountByUserNameAndPassword(reqAccount.getUsername(), reqAccount.getPassword());
 
-        if (account != null) {
+        if (accountOptional.isPresent()) {
+            Account account = accountOptional.get();
+
             TokenInfo tokenInfo = TokenInfo.builder()
                     .userName(account.getUsername())
-                    .roles(Arrays.asList(account.getRole()))
+                    .roles(Collections.singletonList(account.getRole()))
                     .build();
 
             String newJwtToken = jwtUtils.generateJwt(tokenInfo, TokenType.JWT);
@@ -54,5 +57,6 @@ public class LoginUseCase extends UseCase<LoginUseCase.InputValue, ApiResponse> 
     }
 
 
-    public record InputValue(Account account) implements UseCase.InputValue {}
+    public record InputValue(Account account) implements UseCase.InputValue {
+    }
 }

@@ -3,7 +3,6 @@ package com.management_system.authentication.infrastructure.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.management_system.authentication.entities.database.Account;
-import com.management_system.authentication.entities.database.PersonalInfo;
 import com.management_system.authentication.usecases.LoginUseCase;
 import com.management_system.authentication.usecases.RegisterUseCase;
 import com.management_system.authentication.usecases.UpdateProfileUseCase;
@@ -59,11 +58,11 @@ public class AccountController {
     @PostMapping("/authen/account/updateProfile")
     public CompletableFuture<ResponseEntity<ApiResponse>> updateProfile(@RequestBody String json, HttpServletRequest httpRequest) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-        PersonalInfo personalInfo = objectMapper.readValue(json, PersonalInfo.class);
+        Account account = objectMapper.readValue(json, Account.class);
 
         return useCaseExecutor.execute(
                 updateProfileUseCase,
-                new UpdateProfileUseCase.InputValue(personalInfo, httpRequest),
+                new UpdateProfileUseCase.InputValue(account, httpRequest),
                 ResponseMapper::map
         );
     }
