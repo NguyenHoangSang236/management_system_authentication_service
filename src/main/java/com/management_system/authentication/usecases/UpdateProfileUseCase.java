@@ -34,10 +34,9 @@ public class UpdateProfileUseCase extends UseCase<UpdateProfileUseCase.InputValu
 
             if (accountOptional.isPresent()) {
                 Account account = accountOptional.get();
-                account.setPersonalInfo(input.account().getPersonalInfo());
+                account.setPersonalInfo(dbUtils.mergeObjectFromRequest(account.getPersonalInfo(), input.account().getPersonalInfo()));
 
                 accountRepo.save(dbUtils.mergeMongoEntityFromRequest(accountOptional.get(), account));
-//                dbUtils.updateSpecificFields("_id", accountOptional.get().getId(), input.personalInfo().toSubMap(), Account.class);
 
                 return ApiResponse.builder()
                         .result("success")
