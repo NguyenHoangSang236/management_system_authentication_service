@@ -3,7 +3,7 @@ package com.management_system.authentication.usecases;
 import com.management_system.authentication.entities.database.Account;
 import com.management_system.authentication.infrastructure.repository.AccountRepository;
 import com.management_system.utilities.core.usecase.UseCase;
-import com.management_system.utilities.entities.ApiResponse;
+import com.management_system.utilities.entities.api.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
