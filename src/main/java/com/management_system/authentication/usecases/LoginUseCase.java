@@ -6,7 +6,9 @@ import com.management_system.utilities.constant.enumuration.TokenType;
 import com.management_system.utilities.core.usecase.UseCase;
 import com.management_system.utilities.entities.api.response.ApiResponse;
 import com.management_system.utilities.entities.database.TokenInfo;
+import com.management_system.utilities.repository.RefreshTokenRepository;
 import com.management_system.utilities.utils.JwtUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -15,6 +17,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
+@Slf4j
 @Component
 public class LoginUseCase extends UseCase<LoginUseCase.InputValue, ApiResponse> {
     @Autowired
@@ -22,6 +25,9 @@ public class LoginUseCase extends UseCase<LoginUseCase.InputValue, ApiResponse> 
 
     @Autowired
     AccountRepository accountRepo;
+
+    @Autowired
+    RefreshTokenRepository refreshTokenRepo;
 
 
     @Override
@@ -32,18 +38,18 @@ public class LoginUseCase extends UseCase<LoginUseCase.InputValue, ApiResponse> 
         if (accountOptional.isPresent()) {
             Account account = accountOptional.get();
 
-            TokenInfo tokenInfo = TokenInfo.builder()
-                    .userName(account.getUsername())
-                    .roles(Collections.singletonList(account.getRole()))
-                    .build();
+            TokenInfo tokenInfo = refreshTokenRepo.getRefreshTokenInfoByUserName(account.getUsername());
 
-            String newJwtToken = jwtUtils.generateJwt(tokenInfo, TokenType.JWT);
-            System.out.println("JWT: " + newJwtToken);
-            jwtUtils.createRefreshTokenForAccount(account.getUsername(), account.getRole());
+            String newJwtToken = jwtUtils.generateJwt(
+                    TokenInfo.builder().userName(account.getUsername()).roles(Collections.singletonList(account.getRole())).build(),
+                    TokenType.JWT
+            );
+            log.info("JWT: " + newJwtToken);
 
             return ApiResponse.builder()
                     .result("success")
-                    .message(newJwtToken)
+                    .jwt(newJwtToken)
+                    .refreshToken(tokenInfo.getToken())
                     .content(account)
                     .status(HttpStatus.OK)
                     .build();

@@ -4,6 +4,7 @@ import com.management_system.authentication.entities.database.Account;
 import com.management_system.authentication.infrastructure.repository.AccountRepository;
 import com.management_system.utilities.core.usecase.UseCase;
 import com.management_system.utilities.entities.api.response.ApiResponse;
+import com.management_system.utilities.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,9 @@ public class RegisterUseCase extends UseCase<RegisterUseCase.InputValue, ApiResp
     @Autowired
     AccountRepository accountRepo;
 
+    @Autowired
+    JwtUtils jwtUtils;
+
 
     @Override
     public ApiResponse execute(InputValue input) {
@@ -29,6 +33,8 @@ public class RegisterUseCase extends UseCase<RegisterUseCase.InputValue, ApiResp
             reqAccount.setId(UUID.randomUUID().toString());
 
             accountRepo.save(reqAccount);
+
+            jwtUtils.createRefreshTokenForAccount(reqAccount.getUsername(), reqAccount.getRole());
 
             return ApiResponse.builder()
                     .result("success")
