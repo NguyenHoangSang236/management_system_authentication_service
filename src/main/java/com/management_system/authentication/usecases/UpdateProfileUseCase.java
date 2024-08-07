@@ -40,13 +40,13 @@ public class UpdateProfileUseCase extends UseCase<UpdateProfileUseCase.InputValu
 
                 return ApiResponse.builder()
                         .result("success")
-                        .content("Update profile successfully")
+                        .message("Update profile successfully")
                         .status(HttpStatus.OK)
                         .build();
             } else {
                 return ApiResponse.builder()
                         .result("failed")
-                        .content("This account does not exist")
+                        .message("This account does not exist")
                         .status(HttpStatus.BAD_REQUEST)
                         .build();
             }

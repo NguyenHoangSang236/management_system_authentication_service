@@ -38,13 +38,13 @@ public class RegisterUseCase extends UseCase<RegisterUseCase.InputValue, ApiResp
 
             return ApiResponse.builder()
                     .result("success")
-                    .content("Register successfully")
+                    .message("Register successfully")
                     .status(HttpStatus.OK)
                     .build();
         } catch (DuplicateKeyException dupExp) {
             return ApiResponse.builder()
                     .result("failed")
-                    .content("This account has been existed")
+                    .message("This account has been existed")
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .build();
         } catch (Exception e) {
@@ -52,7 +52,7 @@ public class RegisterUseCase extends UseCase<RegisterUseCase.InputValue, ApiResp
 
             return ApiResponse.builder()
                     .result("failed")
-                    .content("Error")
+                    .message("Error")
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .build();
         }

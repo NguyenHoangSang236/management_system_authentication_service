@@ -3,10 +3,7 @@ package com.management_system.authentication.infrastructure.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.management_system.authentication.entities.database.Account;
-import com.management_system.authentication.usecases.LoginUseCase;
-import com.management_system.authentication.usecases.RegisterUseCase;
-import com.management_system.authentication.usecases.UpdateProfileUseCase;
-import com.management_system.authentication.usecases.UploadImageUseCase;
+import com.management_system.authentication.usecases.*;
 import com.management_system.utilities.core.usecase.UseCaseExecutor;
 import com.management_system.utilities.entities.api.response.ApiResponse;
 import com.management_system.utilities.entities.api.response.ResponseMapper;
@@ -29,6 +26,7 @@ public class AccountController {
     final RegisterUseCase registerUseCase;
     final UpdateProfileUseCase updateProfileUseCase;
     final UploadImageUseCase uploadImageUseCase;
+    final RefreshJwtUseCase refreshJwtUseCase;
 
 
     @PostMapping("/unauthen/account/login")
@@ -78,4 +76,13 @@ public class AccountController {
         );
     }
 
+
+    @GetMapping("/unauthen/account/refreshAccessToken")
+    public CompletableFuture<ResponseEntity<ApiResponse>> refreshAccessToken(HttpServletRequest request) throws IOException {
+        return useCaseExecutor.execute(
+                refreshJwtUseCase,
+                new RefreshJwtUseCase.InputValue(request),
+                ResponseMapper::map
+        );
+    }
 }

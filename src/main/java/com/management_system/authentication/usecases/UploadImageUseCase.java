@@ -46,14 +46,14 @@ public class UploadImageUseCase extends UseCase<UploadImageUseCase.InputValue, A
 
                 return ApiResponse.builder()
                         .result("success")
-                        .content("Update profile successfully")
-                        .message(uploadedImageUrl)
+                        .message("Update profile successfully")
+                        .content(uploadedImageUrl)
                         .status(HttpStatus.OK)
                         .build();
             } else {
                 return ApiResponse.builder()
                         .result("failed")
-                        .content("This account does not exist")
+                        .message("This account does not exist")
                         .status(HttpStatus.BAD_REQUEST)
                         .build();
             }
@@ -63,7 +63,7 @@ public class UploadImageUseCase extends UseCase<UploadImageUseCase.InputValue, A
 
             return ApiResponse.builder()
                     .result("failed")
-                    .content("Error")
+                    .message("Error")
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .build();
         }
