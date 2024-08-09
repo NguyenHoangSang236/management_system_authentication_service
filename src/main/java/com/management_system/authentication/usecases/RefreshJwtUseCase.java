@@ -4,7 +4,6 @@ import com.management_system.utilities.constant.enumuration.TokenType;
 import com.management_system.utilities.core.usecase.UseCase;
 import com.management_system.utilities.entities.api.response.ApiResponse;
 import com.management_system.utilities.entities.database.TokenInfo;
-import com.management_system.utilities.repository.RefreshTokenRepository;
 import com.management_system.utilities.utils.JwtUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class RefreshJwtUseCase extends UseCase<RefreshJwtUseCase.InputValue, ApiResponse>{
+public class RefreshJwtUseCase extends UseCase<RefreshJwtUseCase.InputValue, ApiResponse> {
     @Autowired
     JwtUtils jwtUtils;
 
@@ -23,17 +22,16 @@ public class RefreshJwtUseCase extends UseCase<RefreshJwtUseCase.InputValue, Api
     public ApiResponse execute(InputValue input) {
         String refreshToken = jwtUtils.getRefreshTokenFromRequest(input.request());
 
-        if(refreshToken.isBlank()) {
+        if (refreshToken.isBlank()) {
             return ApiResponse.builder()
                     .result("failed")
                     .message("Refresh token must not be null")
                     .status(HttpStatus.BAD_REQUEST)
                     .build();
-        }
-        else {
+        } else {
             boolean isRefreshTokenExpired = jwtUtils.isTokenExpired(refreshToken);
 
-            if(isRefreshTokenExpired) {
+            if (isRefreshTokenExpired) {
                 log.info("Refresh token has been expired");
 
                 return ApiResponse.builder()
@@ -57,5 +55,6 @@ public class RefreshJwtUseCase extends UseCase<RefreshJwtUseCase.InputValue, Api
     }
 
 
-    public record InputValue(HttpServletRequest request) implements UseCase.InputValue{}
+    public record InputValue(HttpServletRequest request) implements UseCase.InputValue {
+    }
 }

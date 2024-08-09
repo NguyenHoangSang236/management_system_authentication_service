@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -21,7 +20,6 @@ import java.util.Map;
 public class PersonalInfo {
     @Id
     @JsonProperty("personal_certificate_id")
-    @Indexed(unique = true)
     String id;
 
     @Field(name = "name")

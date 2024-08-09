@@ -23,13 +23,12 @@ public class Account extends MongoDbEntity implements UserDetails {
     @Getter
     @Setter
     @Id
-    @Indexed(unique = true)
     String id;
 
     @Setter
     @Field(name = "user_name")
     @JsonProperty("user_name")
-    @Indexed(unique = true)
+    @Indexed(unique = true, name = "unique_account_username_index")
     String userName;
 
     @Setter

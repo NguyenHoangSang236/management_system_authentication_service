@@ -14,9 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import javax.swing.text.html.Option;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -48,7 +45,7 @@ public class LoginUseCase extends UseCase<LoginUseCase.InputValue, ApiResponse> 
             Optional<TokenInfo> tokenInfoOptional = refreshTokenRepo.getRefreshTokenInfoByUserName(account.getUsername());
 
             // if there is any TokenInfo in the database -> get it
-            if(tokenInfoOptional.isPresent()){
+            if (tokenInfoOptional.isPresent()) {
                 tokenInfo = tokenInfoOptional.get();
             }
             // if there is no TokenInfo in the database -> create a new one
