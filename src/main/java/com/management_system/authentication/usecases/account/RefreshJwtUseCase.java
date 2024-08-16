@@ -1,4 +1,4 @@
-package com.management_system.authentication.usecases;
+package com.management_system.authentication.usecases.account;
 
 import com.management_system.utilities.constant.enumuration.TokenType;
 import com.management_system.utilities.core.usecase.UseCase;

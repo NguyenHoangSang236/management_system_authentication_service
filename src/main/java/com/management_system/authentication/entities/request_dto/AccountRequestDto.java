@@ -1,4 +1,4 @@
-package com.management_system.authentication.entities.dto;
+package com.management_system.authentication.entities.request_dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.management_system.authentication.entities.database.PersonalInfo;

@@ -1,4 +1,4 @@
-package com.management_system.authentication.usecases;
+package com.management_system.authentication.usecases.account;
 
 import com.management_system.authentication.entities.database.Account;
 import com.management_system.authentication.entities.database.PersonalInfo;

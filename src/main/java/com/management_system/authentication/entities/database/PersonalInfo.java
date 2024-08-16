@@ -1,7 +1,9 @@
 package com.management_system.authentication.entities.database;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.management_system.utilities.core.validator.EmailConstraint;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -33,6 +35,7 @@ public class PersonalInfo {
     @Field(name = "phone_number")
     String phoneNumber;
 
+    @EmailConstraint
     @Field(name = "email")
     String email;
 
@@ -46,10 +49,12 @@ public class PersonalInfo {
     @Field(name = "working_branch")
     String workingBranch;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     @JsonProperty("start_working_date")
     @Field(name = "start_working_date")
     Date startWorkingDate;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     @JsonProperty("end_working_date")
     @Field(name = "end_working_date")
     Date endtWorkingDate;

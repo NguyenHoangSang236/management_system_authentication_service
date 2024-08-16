@@ -3,7 +3,7 @@ package com.management_system.authentication.infrastructure.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.management_system.authentication.entities.database.Account;
-import com.management_system.authentication.usecases.*;
+import com.management_system.authentication.usecases.account.*;
 import com.management_system.utilities.core.usecase.UseCaseExecutor;
 import com.management_system.utilities.entities.api.response.ApiResponse;
 import com.management_system.utilities.entities.api.response.ResponseMapper;
@@ -30,10 +30,7 @@ public class AccountController {
 
 
     @PostMapping("/unauthen/account/login")
-    public CompletableFuture<ResponseEntity<ApiResponse>> login(@RequestBody String json) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        Account account = objectMapper.readValue(json, Account.class);
-
+    public CompletableFuture<ResponseEntity<ApiResponse>> login(@RequestBody Account account) throws IOException {
         return useCaseExecutor.execute(
                 loginUseCase,
                 new LoginUseCase.InputValue(account),
@@ -42,10 +39,7 @@ public class AccountController {
     }
 
     @PostMapping("/unauthen/account/register")
-    public CompletableFuture<ResponseEntity<ApiResponse>> register(@RequestBody String json) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        Account account = objectMapper.readValue(json, Account.class);
-
+    public CompletableFuture<ResponseEntity<ApiResponse>> register(@RequestBody Account account) throws IOException {
         return useCaseExecutor.execute(
                 registerUseCase,
                 new RegisterUseCase.InputValue(account),
@@ -54,10 +48,7 @@ public class AccountController {
     }
 
     @PostMapping("/authen/account/updateProfile")
-    public CompletableFuture<ResponseEntity<ApiResponse>> updateProfile(@RequestBody String json, HttpServletRequest httpRequest) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        Account account = objectMapper.readValue(json, Account.class);
-
+    public CompletableFuture<ResponseEntity<ApiResponse>> updateProfile(@RequestBody Account account, HttpServletRequest httpRequest) throws JsonProcessingException {
         return useCaseExecutor.execute(
                 updateProfileUseCase,
                 new UpdateProfileUseCase.InputValue(account, httpRequest),
