@@ -1,8 +1,8 @@
 package com.management_system.authentication.infrastructure.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.management_system.authentication.entities.database.Account;
+import com.management_system.authentication.entities.request_dto.AccountRequestDto;
 import com.management_system.authentication.usecases.account.*;
 import com.management_system.utilities.core.usecase.UseCaseExecutor;
 import com.management_system.utilities.entities.api.response.ApiResponse;
@@ -28,7 +28,6 @@ public class AccountController {
     final UploadImageUseCase uploadImageUseCase;
     final RefreshJwtUseCase refreshJwtUseCase;
 
-
     @PostMapping("/unauthen/account/login")
     public CompletableFuture<ResponseEntity<ApiResponse>> login(@RequestBody Account account) throws IOException {
         return useCaseExecutor.execute(
@@ -48,10 +47,10 @@ public class AccountController {
     }
 
     @PostMapping("/authen/account/updateProfile")
-    public CompletableFuture<ResponseEntity<ApiResponse>> updateProfile(@RequestBody Account account, HttpServletRequest httpRequest) throws JsonProcessingException {
+    public CompletableFuture<ResponseEntity<ApiResponse>> updateProfile(@RequestBody AccountRequestDto accountRequest, HttpServletRequest httpRequest) throws JsonProcessingException {
         return useCaseExecutor.execute(
                 updateProfileUseCase,
-                new UpdateProfileUseCase.InputValue(account, httpRequest),
+                new UpdateProfileUseCase.InputValue(accountRequest, httpRequest),
                 ResponseMapper::map
         );
     }

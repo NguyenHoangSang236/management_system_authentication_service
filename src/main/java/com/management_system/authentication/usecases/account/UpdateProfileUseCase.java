@@ -1,6 +1,7 @@
 package com.management_system.authentication.usecases.account;
 
 import com.management_system.authentication.entities.database.Account;
+import com.management_system.authentication.entities.request_dto.AccountRequestDto;
 import com.management_system.authentication.infrastructure.repository.AccountRepository;
 import com.management_system.utilities.core.usecase.UseCase;
 import com.management_system.utilities.entities.api.response.ApiResponse;
@@ -34,9 +35,9 @@ public class UpdateProfileUseCase extends UseCase<UpdateProfileUseCase.InputValu
 
             if (accountOptional.isPresent()) {
                 Account account = accountOptional.get();
-                account.setPersonalInfo(dbUtils.mergeObjectFromRequest(account.getPersonalInfo(), input.account().getPersonalInfo()));
+                account.setPersonalInfo(dbUtils.mergeObjectFromRequest(account.getPersonalInfo(), input.accountRequest().getPersonalInfo()));
 
-                accountRepo.save(dbUtils.mergeMongoEntityFromRequest(accountOptional.get(), account));
+                accountRepo.save(dbUtils.mergeMongoEntityFromRequest(accountOptional.get(), input.accountRequest()));
 
                 return ApiResponse.builder()
                         .result("success")
@@ -61,6 +62,6 @@ public class UpdateProfileUseCase extends UseCase<UpdateProfileUseCase.InputValu
         }
     }
 
-    public record InputValue(Account account, HttpServletRequest request) implements UseCase.InputValue {
+    public record InputValue(AccountRequestDto accountRequest, HttpServletRequest request) implements UseCase.InputValue {
     }
 }
