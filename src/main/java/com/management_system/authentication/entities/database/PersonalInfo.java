@@ -3,7 +3,7 @@ package com.management_system.authentication.entities.database;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.management_system.utilities.core.validator.EmailConstraint;
+import jakarta.validation.constraints.Email;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -35,7 +35,7 @@ public class PersonalInfo {
     @Field(name = "phone_number")
     String phoneNumber;
 
-    @EmailConstraint
+    @Email
     @Field(name = "email")
     String email;
 
