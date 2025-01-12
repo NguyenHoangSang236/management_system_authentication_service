@@ -7,6 +7,11 @@ import com.management_system.authentication.usecases.account.*;
 import com.management_system.utilities.core.usecase.UseCaseExecutor;
 import com.management_system.utilities.entities.api.response.ApiResponse;
 import com.management_system.utilities.entities.api.response.ResponseMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
@@ -17,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
+@Tag(name = "Account", description = "Operations related to managing account")
 @RestController
 @RequestMapping(consumes = {"*/*"}, produces = {MediaType.APPLICATION_JSON_VALUE})
 @AllArgsConstructor
@@ -28,6 +34,7 @@ public class AccountController {
     final UploadImageUseCase uploadImageUseCase;
     final RefreshJwtUseCase refreshJwtUseCase;
 
+    @Operation(summary = "Login to the system")
     @PostMapping("/unauthen/account/login")
     public CompletableFuture<ResponseEntity<ApiResponse>> login(@RequestBody Account account) throws IOException {
         return useCaseExecutor.execute(
@@ -37,6 +44,7 @@ public class AccountController {
         );
     }
 
+    @Operation(summary = "Register to the system")
     @PostMapping("/unauthen/account/register")
     public CompletableFuture<ResponseEntity<ApiResponse>> register(@RequestBody Account account) throws IOException {
         return useCaseExecutor.execute(
@@ -46,6 +54,7 @@ public class AccountController {
         );
     }
 
+    @Operation(summary = "Update profile of an account")
     @PostMapping("/authen/account/updateProfile")
     public CompletableFuture<ResponseEntity<ApiResponse>> updateProfile(@RequestBody AccountRequestDto accountRequest, HttpServletRequest httpRequest) throws JsonProcessingException {
         return useCaseExecutor.execute(
@@ -55,10 +64,20 @@ public class AccountController {
         );
     }
 
-    @PostMapping("/authen/account/uploadAvatar")
-    public CompletableFuture<ResponseEntity<ApiResponse>> uploadImage(@RequestParam("file") MultipartFile fileUpload,
-                                                                      @RequestParam("fileName") String fileName,
-                                                                      HttpServletRequest request) {
+    @Operation(summary = "Upload an avatar image of an account")
+    @PostMapping(value = "/authen/account/uploadAvatar", consumes= MediaType.MULTIPART_FORM_DATA_VALUE)
+    public CompletableFuture<ResponseEntity<ApiResponse>> uploadImage(
+            @Parameter(description = "File to upload", required = true,
+                    content = @Content(
+                            mediaType = "multipart/form-data",
+                            schema = @Schema(type = "string", format = "binary")
+                    )
+            )
+            @RequestParam("file")
+            MultipartFile fileUpload,
+            @RequestParam("fileName")
+            String fileName,
+            HttpServletRequest request) {
         return useCaseExecutor.execute(
                 uploadImageUseCase,
                 new UploadImageUseCase.InputValue(request, fileUpload, fileName),
@@ -66,7 +85,7 @@ public class AccountController {
         );
     }
 
-
+    @Operation(summary = "Refresh access token", description = "Call this API when JWT token is expired")
     @GetMapping("/unauthen/account/refreshAccessToken")
     public CompletableFuture<ResponseEntity<ApiResponse>> refreshAccessToken(HttpServletRequest request) throws IOException {
         return useCaseExecutor.execute(
