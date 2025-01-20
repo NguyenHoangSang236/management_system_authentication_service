@@ -13,15 +13,20 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
+@Validated
 @Tag(name = "Account", description = "Operations related to managing account")
 @RestController
 @RequestMapping(consumes = {"*/*"}, produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -35,18 +40,29 @@ public class AccountController {
     final RefreshJwtUseCase refreshJwtUseCase;
 
     @Operation(summary = "Login to the system")
-    @PostMapping("/unauthen/account/login")
-    public CompletableFuture<ResponseEntity<ApiResponse>> login(@RequestBody Account account) throws IOException {
+    @GetMapping("/unauthen/account/login")
+    public CompletableFuture<ResponseEntity<ApiResponse>> login(
+            @RequestParam
+            @NotNull
+            @NotBlank
+            @Size(max = 20, message = "User name must not be empty")
+            String userName,
+            @RequestParam
+            @NotNull
+            @NotBlank
+            @Size(max = 30, message = "Password must not be empty")
+            String password
+    ) {
         return useCaseExecutor.execute(
                 loginUseCase,
-                new LoginUseCase.InputValue(account),
+                new LoginUseCase.InputValue(userName, password),
                 ResponseMapper::map
         );
     }
 
     @Operation(summary = "Register to the system")
     @PostMapping("/unauthen/account/register")
-    public CompletableFuture<ResponseEntity<ApiResponse>> register(@RequestBody Account account) throws IOException {
+    public CompletableFuture<ResponseEntity<ApiResponse>> register(@RequestBody Account account) {
         return useCaseExecutor.execute(
                 registerUseCase,
                 new RegisterUseCase.InputValue(account),
@@ -56,7 +72,10 @@ public class AccountController {
 
     @Operation(summary = "Update profile of an account")
     @PostMapping("/authen/account/updateProfile")
-    public CompletableFuture<ResponseEntity<ApiResponse>> updateProfile(@RequestBody AccountRequestDto accountRequest, HttpServletRequest httpRequest) throws JsonProcessingException {
+    public CompletableFuture<ResponseEntity<ApiResponse>> updateProfile(
+            @RequestBody AccountRequestDto accountRequest,
+            HttpServletRequest httpRequest)
+    {
         return useCaseExecutor.execute(
                 updateProfileUseCase,
                 new UpdateProfileUseCase.InputValue(accountRequest, httpRequest),
@@ -87,7 +106,7 @@ public class AccountController {
 
     @Operation(summary = "Refresh access token", description = "Call this API when JWT token is expired")
     @GetMapping("/unauthen/account/refreshAccessToken")
-    public CompletableFuture<ResponseEntity<ApiResponse>> refreshAccessToken(HttpServletRequest request) throws IOException {
+    public CompletableFuture<ResponseEntity<ApiResponse>> refreshAccessToken(HttpServletRequest request) {
         return useCaseExecutor.execute(
                 refreshJwtUseCase,
                 new RefreshJwtUseCase.InputValue(request),

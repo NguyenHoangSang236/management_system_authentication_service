@@ -33,8 +33,10 @@ public class LoginUseCase extends UseCase<LoginUseCase.InputValue, ApiResponse> 
 
     @Override
     public ApiResponse execute(InputValue input) {
-        Account reqAccount = input.account();
-        Optional<Account> accountOptional = accountRepo.getAccountByUserNameAndPassword(reqAccount.getUsername(), reqAccount.getPassword());
+        Optional<Account> accountOptional = accountRepo.getAccountByUserNameAndPassword(
+                input.userName(),
+                input.password()
+        );
         String newRefreshToken;
         String newJwt;
         TokenInfo tokenInfo;
@@ -88,6 +90,6 @@ public class LoginUseCase extends UseCase<LoginUseCase.InputValue, ApiResponse> 
     }
 
 
-    public record InputValue(Account account) implements UseCase.InputValue {
+    public record InputValue(String userName, String password ) implements UseCase.InputValue {
     }
 }
