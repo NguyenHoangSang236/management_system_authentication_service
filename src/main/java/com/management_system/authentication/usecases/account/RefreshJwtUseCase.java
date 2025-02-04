@@ -14,8 +14,11 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class RefreshJwtUseCase extends UseCase<RefreshJwtUseCase.InputValue, ApiResponse> {
-    @Autowired
-    JwtUtils jwtUtils;
+    private final JwtUtils jwtUtils;
+
+    public RefreshJwtUseCase(JwtUtils jwtUtils) {
+        this.jwtUtils = jwtUtils;
+    }
 
 
     @Override
